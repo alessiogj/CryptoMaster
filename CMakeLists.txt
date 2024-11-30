@@ -10,12 +10,12 @@ option(BUILD_SHARED_LIBS "Build CryptoMaster as a shared library" ON)
 find_package(OpenSSL REQUIRED)
 
 add_library(CryptoMaster
-        FileHandler.cpp
-        Utils.cpp
+        src/FileHandler.cpp
+        src/Utils.cpp
 )
 
 target_include_directories(CryptoMaster PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>
 )
 
@@ -40,12 +40,13 @@ install(TARGETS CryptoMaster
 )
 
 install(FILES
-        CryptoMaster.h
-        FileHandler.h
-        Utils.h
+        include/CryptoMaster.h
+        include/FileHandler.h
+        include/Utils.h
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 
+# Export target configuration for other projects
 install(EXPORT CryptoMasterTargets
         FILE CryptoMasterTargets.cmake
         NAMESPACE CryptoMaster::

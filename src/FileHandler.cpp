@@ -1,7 +1,3 @@
-//
-// Created by Alessio Gjergji on 30/11/24.
-//
-
 #include "FileHandler.h"
 #include <fstream>
 #include <stdexcept>
