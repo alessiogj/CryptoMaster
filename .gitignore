@@ -1,19 +1,24 @@
+# Build directories
 build/
 cmake-build-debug/
 
+# CMake generated files
 CMakeCache.txt
 CMakeFiles/
 Makefile
 cmake_install.cmake
 
+# IDE-specific files
 .idea/
 .vscode/
 
+# Logs, temporary files, and macOS specific files
 *.log
 *.tmp
 *.swp
 *.DS_Store
 
+# Object and binary files
 *.o
 *.obj
 *.so
@@ -23,8 +28,26 @@ cmake_install.cmake
 *.a
 *.lib
 
+# Backup files
 *.bak
 *.dmp
 
+# Conan-generated files
+conan.lock
+conanbuildinfo.cmake
+conanbuildinfo.txt
+conanbuild/
+conanfile.pyc
+graph_info.json
+build/generators/
+conan_logs/
+build/conan_toolchain.cmake
+build/build/
+
+# CMake Presets
+CMakePresets.json
+CMakeUserPresets.json
+
+# Auto-generated files
 *.generated.*
 *.auto.*

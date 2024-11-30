@@ -1,22 +1,20 @@
-cmake_minimum_required(VERSION 3.26)
+cmake_minimum_required(VERSION 3.15)
 project(CryptoMaster VERSION 1.0.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-option(BUILD_SHARED_LIBS "Build CryptoMaster as a shared library" ON)
-
 find_package(OpenSSL REQUIRED)
 
-add_library(CryptoMaster
+add_library(CryptoMaster STATIC
         src/FileHandler.cpp
         src/Utils.cpp
 )
 
 target_include_directories(CryptoMaster PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-        $<INSTALL_INTERFACE:include>
+        $<INSTALL_INTERFACE:include/CryptoMaster>
 )
 
 target_link_libraries(CryptoMaster PUBLIC OpenSSL::SSL OpenSSL::Crypto)
@@ -30,23 +28,16 @@ set_target_properties(CryptoMaster PROPERTIES
 add_library(CryptoMaster::CryptoMaster ALIAS CryptoMaster)
 
 include(GNUInstallDirs)
-
 install(TARGETS CryptoMaster
         EXPORT CryptoMasterTargets
-        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/CryptoMaster
 )
 
-install(FILES
-        include/CryptoMaster.h
-        include/FileHandler.h
-        include/Utils.h
-        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-)
+install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/CryptoMaster)
 
-# Export target configuration for other projects
 install(EXPORT CryptoMasterTargets
         FILE CryptoMasterTargets.cmake
         NAMESPACE CryptoMaster::
@@ -54,11 +45,10 @@ install(EXPORT CryptoMasterTargets
 )
 
 include(CMakePackageConfigHelpers)
-
 write_basic_package_version_file(
         ${CMAKE_CURRENT_BINARY_DIR}/CryptoMasterConfigVersion.cmake
         VERSION ${PROJECT_VERSION}
-        COMPATIBILITY AnyNewerVersion
+        COMPATIBILITY SameMajorVersion
 )
 
 configure_package_config_file(

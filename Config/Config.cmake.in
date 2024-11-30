@@ -1,6 +1,12 @@
 @PACKAGE_INIT@
 
+include(CMakeFindDependencyMacro)
+
+find_dependency(OpenSSL REQUIRED)
+
 include("${CMAKE_CURRENT_LIST_DIR}/CryptoMasterTargets.cmake")
 
 set(CryptoMaster_INCLUDE_DIRS "@PACKAGE_INCLUDE_INSTALL_DIR@")
 set(CryptoMaster_LIBRARIES CryptoMaster::CryptoMaster)
+
+set(CryptoMaster_FOUND TRUE)
