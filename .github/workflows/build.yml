@@ -49,8 +49,8 @@ jobs:
         with:
           name: CryptoMaster-libraries-${{ matrix.os }}
           path: |
-            build/${{ matrix.os }}/Release/*.a
-            build/${{ matrix.os }}/Release/*.lib
-            build/${{ matrix.os }}/Release/*.so
-            build/${{ matrix.os }}/Release/*.dylib
-            build/${{ matrix.os }}/Release/*.dll
+            build/${{ matrix.os }}/**/*.a
+            build/${{ matrix.os }}/**/*.lib
+            build/${{ matrix.os }}/**/*.so
+            build/${{ matrix.os }}/**/*.dylib
+            build/${{ matrix.os }}/**/*.dll
