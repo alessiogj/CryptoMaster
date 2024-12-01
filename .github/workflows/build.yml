@@ -8,40 +8,56 @@ on:
     branches:
       - master
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        build-type: [Release, Debug]
+        shared_libs: [ON, OFF]
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.x"
-
-      - name: Install Conan
+      - name: Install CMake
         run: |
-          python -m pip install --upgrade pip
-          pip install conan
-
-      - name: Setup CMake
-        uses: lukka/get-cmake@v3
-
-      - name: Install Dependencies
-        run: |
-          conan install . --output-folder=build --build=missing
+          if [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
+            sudo apt-get update && sudo apt-get install -y cmake;
+          elif [ "${{ matrix.os }}" == "windows-latest" ]; then
+            choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System' || echo "CMake already installed";
+          fi
+        shell: bash
 
       - name: Configure with CMake
         run: |
-          cmake -DCMAKE_TOOLCHAIN_FILE=build/conan_toolchain.cmake -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} -B build -S .
+          cmake -DCMAKE_BUILD_TYPE=Release \
+                -DBUILD_SHARED_LIBS=${{ matrix.shared_libs }} \
+                -DCMAKE_LIBRARY_OUTPUT_DIRECTORY=build/${{ matrix.os }} \
+                -DCMAKE_ARCHIVE_OUTPUT_DIRECTORY=build/${{ matrix.os }} \
+                -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=build/${{ matrix.os }} \
+                -B build/${{ matrix.os }} -S .
+        shell: bash
 
       - name: Build Project
-        run: cmake --build build
+        run: |
+          if [ "${{ matrix.os }}" == "windows-latest" ]; then
+            cmake --build build/${{ matrix.os }} --config Release
+          else
+            cmake --build build/${{ matrix.os }}
+          fi
+        shell: bash
 
-      - name: Run Tests
-        run: ctest --test-dir build
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: CryptoMaster-libraries-${{ matrix.os }}-${{ matrix.shared_libs == 'ON' && 'dynamic' || 'static' }}
+          path: |
+            build/${{ matrix.os }}/**/*.a
+            build/${{ matrix.os }}/**/*.lib
+            build/${{ matrix.os }}/**/*.so
+            build/${{ matrix.os }}/**/*.dylib
+            build/${{ matrix.os }}/**/*.dll

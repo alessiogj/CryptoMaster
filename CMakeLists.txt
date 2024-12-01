@@ -1,13 +1,20 @@
 cmake_minimum_required(VERSION 3.15)
 project(CryptoMaster VERSION 1.0.0 LANGUAGES CXX)
 
+# Imposta il C++ standard
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
+
 find_package(OpenSSL REQUIRED)
 
-add_library(CryptoMaster STATIC
+if(NOT OpenSSL_FOUND)
+    message(FATAL_ERROR "OpenSSL not found")
+endif()
+
+add_library(CryptoMaster
         src/FileHandler.cpp
         src/Utils.cpp
 )
