@@ -44,13 +44,10 @@ jobs:
         run: cmake --build build/${{ matrix.os }}/Release
         shell: bash
 
-      - name: Upload Build Artifacts
+      - name: Upload All Artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: CryptoMaster-libraries-${{ matrix.os }}
+          name: CryptoMaster-All-Files-${{ matrix.os }}
           path: |
-            build/${{ matrix.os }}/**/*.a
-            build/${{ matrix.os }}/**/*.lib
-            build/${{ matrix.os }}/**/*.so
-            build/${{ matrix.os }}/**/*.dylib
-            build/${{ matrix.os }}/**/*.dll
+            **/*
+
