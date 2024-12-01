@@ -23,8 +23,7 @@ jobs:
         run: |
           if [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
             sudo apt-get update && sudo apt-get install -y cmake;
-          elif [ "${{ matrix.os }}" == "macos-latest" ]; then
-            brew install --formula cmake || echo "CMake already installed";
+          # already installed on macOS
           elif [ "${{ matrix.os }}" == "windows-latest" ]; then
             choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System' || echo "CMake already installed";
           fi
@@ -44,8 +43,13 @@ jobs:
         run: cmake --build build/${{ matrix.os }}/Release
         shell: bash
 
-      - name: Upload All Artifacts
-        uses: actions/upload-artifact@v4
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v3
         with:
-            name: ${{ matrix.os }}-Release
-            path: build/
+          name: CryptoMaster-libraries-${{ matrix.os }}
+          path: |
+            build/${{ matrix.os }}/**/*.a
+            build/${{ matrix.os }}/**/*.lib
+            build/${{ matrix.os }}/**/*.so
+            build/${{ matrix.os }}/**/*.dylib
+            build/${{ matrix.os }}/**/*.dll
