@@ -23,7 +23,6 @@ jobs:
         run: |
           if [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
             sudo apt-get update && sudo apt-get install -y cmake;
-          # already installed on macOS
           elif [ "${{ matrix.os }}" == "windows-latest" ]; then
             choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System' || echo "CMake already installed";
           fi
@@ -32,15 +31,15 @@ jobs:
       - name: Configure with CMake
         run: |
           cmake -DCMAKE_BUILD_TYPE=Release \
-                -DBUILD_SHARED_LIBS=ON \
-                -DCMAKE_LIBRARY_OUTPUT_DIRECTORY=build/${{ matrix.os }}/Release \
-                -DCMAKE_ARCHIVE_OUTPUT_DIRECTORY=build/${{ matrix.os }}/Release \
-                -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=build/${{ matrix.os }}/Release \
-                -B build/${{ matrix.os }}/Release -S .
+                -B build/${{ matrix.os }} -S .
         shell: bash
 
-      - name: Build Project
-        run: cmake --build build/${{ matrix.os }}/Release
+      - name: Build Shared Library
+        run: cmake --build build/${{ matrix.os }} --target CryptoMaster_shared
+        shell: bash
+
+      - name: Build Static Library
+        run: cmake --build build/${{ matrix.os }} --target CryptoMaster_static
         shell: bash
 
       - name: Upload Build Artifacts
