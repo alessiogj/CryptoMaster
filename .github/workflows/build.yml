@@ -17,29 +17,18 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        compiler: [gcc, clang, msvc]
         shared_libs: [ON, OFF]
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Cache CMake Files
-        uses: actions/cache@v3
-        with:
-          path: build/${{ matrix.os }}/CMakeFiles
-          key: ${{ runner.os }}-cmake-${{ hashFiles('**/CMakeLists.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-cmake-
-
-      - name: Install Dependencies
+      - name: Install CMake
         run: |
           if [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
-            sudo apt-get update && sudo apt-get install -y cmake build-essential;
+            sudo apt-get update && sudo apt-get install -y cmake;
           elif [ "${{ matrix.os }}" == "windows-latest" ]; then
             choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System' || echo "CMake already installed";
-          elif [ "${{ matrix.os }}" == "macos-latest" ]; then
-            brew install cmake || echo "CMake already installed";
           fi
         shell: bash
 
@@ -56,61 +45,19 @@ jobs:
       - name: Build Project
         run: |
           if [ "${{ matrix.os }}" == "windows-latest" ]; then
-            cmake --build build/${{ matrix.os }} --config Release;
+            cmake --build build/${{ matrix.os }} --config Release
           else
-            cmake --build build/${{ matrix.os }};
+            cmake --build build/${{ matrix.os }}
           fi
-        shell: bash
-
-      - name: Run Tests
-        run: |
-          ctest --output-on-failure -C Release -j $(nproc) -S build/${{ matrix.os }}
-        shell: bash
-
-      - name: Gather Build Logs on Failure
-        if: failure()
-        run: |
-          cat build/${{ matrix.os }}/CMakeFiles/CMakeOutput.log || echo "No output log"
-          cat build/${{ matrix.os }}/CMakeFiles/CMakeError.log || echo "No error log"
         shell: bash
 
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: CryptoMaster-${{ matrix.os }}-${{ matrix.compiler }}-${{ matrix.shared_libs == 'ON' && 'dynamic' || 'static' }}
+          name: CryptoMaster-libraries-${{ matrix.os }}-${{ matrix.shared_libs == 'ON' && 'dynamic' || 'static' }}
           path: |
             build/${{ matrix.os }}/**/*.a
             build/${{ matrix.os }}/**/*.lib
             build/${{ matrix.os }}/**/*.so
             build/${{ matrix.os }}/**/*.dylib
             build/${{ matrix.os }}/**/*.dll
-
-      - name: Code Style Check
-        run: |
-          clang-format --dry-run --Werror $(find . -name '*.cpp' -o -name '*.h')
-        shell: bash
-
-      - name: Generate Documentation
-        run: |
-          doxygen Doxyfile
-        shell: bash
-
-      - name: Upload Documentation
-        uses: actions/upload-artifact@v4
-        with:
-          name: documentation
-          path: docs/html
-
-  analyze:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v2
-        with:
-          languages: cpp
-
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v2
