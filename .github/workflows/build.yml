@@ -58,3 +58,14 @@ jobs:
             build/${{ matrix.os }}/**/*.so
             build/${{ matrix.os }}/**/*.dylib
             build/${{ matrix.os }}/**/*.dll
+
+      - name: Compress and Upload Full Project
+        run: |
+          zip -r project-${{ matrix.os }}.zip .
+        shell: bash
+
+      - name: Upload Project Archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: CryptoMaster-full-project-${{ matrix.os }}
+          path: project-${{ matrix.os }}.zip
