@@ -14,7 +14,6 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        build-type: [Release, Debug]
 
     steps:
       - name: Checkout repository
@@ -33,16 +32,22 @@ jobs:
 
       - name: Configure with CMake
         run: |
-          cmake -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} \
-                -B build -S .
+          cmake -DCMAKE_BUILD_TYPE=Release \
+                -DBUILD_SHARED_LIBS=ON \
+                -B build/${{ matrix.os }}/Release \
+                -S .
         shell: bash
 
       - name: Build Project
-        run: cmake --build build
+        run: cmake --build build/${{ matrix.os }}/Release
         shell: bash
 
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: build-artifacts
-          path: build/
+          name: CryptoMaster-libraries-${{ matrix.os }}
+          path: |
+            build/${{ matrix.os }}/Release/*.a
+            build/${{ matrix.os }}/Release/*.lib
+            build/${{ matrix.os }}/Release/*.so
+            build/${{ matrix.os }}/Release/*.dylib
