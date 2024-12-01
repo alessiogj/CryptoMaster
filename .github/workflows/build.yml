@@ -33,23 +33,23 @@ jobs:
         run: |
           cmake -DCMAKE_BUILD_TYPE=Release \
                 -DBUILD_SHARED_LIBS=${{ matrix.shared_libs }} \
-                -DCMAKE_LIBRARY_OUTPUT_DIRECTORY=build/${{ matrix.os }}/Release_${{ matrix.shared_libs }} \
-                -DCMAKE_ARCHIVE_OUTPUT_DIRECTORY=build/${{ matrix.os }}/Release_${{ matrix.shared_libs }} \
-                -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=build/${{ matrix.os }}/Release_${{ matrix.shared_libs }} \
-                -B build/${{ matrix.os }}/Release_${{ matrix.shared_libs }} -S .
+                -DCMAKE_LIBRARY_OUTPUT_DIRECTORY=build/${{ matrix.os }}/Release/${{ matrix.shared_libs == 'ON' && 'dynamic' || 'static' }} \
+                -DCMAKE_ARCHIVE_OUTPUT_DIRECTORY=build/${{ matrix.os }}/Release/${{ matrix.shared_libs == 'ON' && 'dynamic' || 'static' }} \
+                -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=build/${{ matrix.os }}/Release/${{ matrix.shared_libs == 'ON' && 'dynamic' || 'static' }} \
+                -B build/${{ matrix.os }}/Release/${{ matrix.shared_libs == 'ON' && 'dynamic' || 'static' }} -S .
         shell: bash
 
       - name: Build Project
-        run: cmake --build build/${{ matrix.os }}/Release_${{ matrix.shared_libs }}
+        run: cmake --build build/${{ matrix.os }}/Release/${{ matrix.shared_libs == 'ON' && 'dynamic' || 'static' }}
         shell: bash
 
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: CryptoMaster-libraries-${{ matrix.os }}-${{ matrix.shared_libs }}
+          name: CryptoMaster-libraries-${{ matrix.os }}-${{ matrix.shared_libs == 'ON' && 'dynamic' || 'static' }}
           path: |
-            build/${{ matrix.os }}/Release_${{ matrix.shared_libs }}/**/*.a
-            build/${{ matrix.os }}/Release_${{ matrix.shared_libs }}/**/*.lib
-            build/${{ matrix.os }}/Release_${{ matrix.shared_libs }}/**/*.so
-            build/${{ matrix.os }}/Release_${{ matrix.shared_libs }}/**/*.dylib
-            build/${{ matrix.os }}/Release_${{ matrix.shared_libs }}/**/*.dll
+            build/${{ matrix.os }}/Release/${{ matrix.shared_libs == 'ON' && 'dynamic' || 'static' }}/**/*.a
+            build/${{ matrix.os }}/Release/${{ matrix.shared_libs == 'ON' && 'dynamic' || 'static' }}/**/*.lib
+            build/${{ matrix.os }}/Release/${{ matrix.shared_libs == 'ON' && 'dynamic' || 'static' }}/**/*.so
+            build/${{ matrix.os }}/Release/${{ matrix.shared_libs == 'ON' && 'dynamic' || 'static' }}/**/*.dylib
+            build/${{ matrix.os }}/Release/${{ matrix.shared_libs == 'ON' && 'dynamic' || 'static' }}/**/*.dll
