@@ -1,7 +1,7 @@
 # CryptoMaster
 
 <p align="center">
-  <img src="img/logo.png" alt="CryptoMaster Logo" width="200" style="border-radius: 15px; box-shadow: 0 4px 
+  <img src="img/logo.png" alt="CryptoMaster Logo" width="250" style="border-radius: 15px; box-shadow: 0 4px 
   8px rgba(0, 0, 0, 0.2);">
 </p>
 
