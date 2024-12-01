@@ -69,10 +69,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Download all Artifacts
-        uses: actions/download-artifact@v3
-        with:
-          path: ./artifacts
+      - name: Build
+        run: |
+          mkdir -p artifacts
+          # Add your build commands here that generate the artifact files
+          # For example, if using CMake and C++:
+          cmake -S . -B build
+          cmake --build build --target all
+          # Assuming the build process creates zip files in the build directory
+          cp build/*.zip artifacts/
 
       - name: Create GitHub Release
         id: create-release
@@ -80,13 +85,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v${{ github.run_id }}
-          release_name: "CryptoMaster Build (Run ${{ github.run_id }})"
-          body: "Questa release include i build artefatti generati automaticamente."
+          tag_name: v1.0.0
+          release_name: "CryptoMaster Build (Version 1.0.0)"
+          body: ""
           draft: false
           prerelease: false
 
       - name: Upload Release Assets
+        if: always()
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
