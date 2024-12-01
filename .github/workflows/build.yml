@@ -48,24 +48,34 @@ jobs:
           fi
         shell: bash
 
+      - name: Package Artifacts
+        run: |
+          mkdir -p release
+          zip -r release/CryptoMaster-${{ matrix.os }}-${{ matrix.shared_libs == 'ON' && 'dynamic' || 'static' }}.zip build/${{ matrix.os }}
+        shell: bash
+
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: CryptoMaster-libraries-${{ matrix.os }}-${{ matrix.shared_libs == 'ON' && 'dynamic' || 'static' }}
-          path: |
-            build/${{ matrix.os }}/**/*.a
-            build/${{ matrix.os }}/**/*.lib
-            build/${{ matrix.os }}/**/*.so
-            build/${{ matrix.os }}/**/*.dylib
-            build/${{ matrix.os }}/**/*.dll
+          name: CryptoMaster-${{ matrix.os }}-${{ matrix.shared_libs == 'ON' && 'dynamic' || 'static' }}
+          path: release/*.zip
 
-      - name: Compress Full Project
-        run: |
-          zip -r CryptoMaster-${{ matrix.os }}-${{ matrix.shared_libs == 'ON' && 'dynamic' || 'static' }}.zip . -x "CryptoMaster-*.zip"
-        shell: bash
-
-      - name: Upload Full Project Archive
-        uses: actions/upload-artifact@v4
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all Artifacts
+        uses: actions/download-artifact@v3
         with:
-          name: CryptoMaster-full-project-${{ matrix.os }}-${{ matrix.shared_libs == 'ON' && 'dynamic' || 'static' }}
-          path: CryptoMaster-${{ matrix.os }}-${{ matrix.shared_libs == 'ON' && 'dynamic' || 'static' }}.zip
+          path: ./artifacts
+
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ github.run_id }}
+          release_name: "Build CryptoMaster (Run ${{ github.run_id }})"
+          draft: false
+          prerelease: false
+          files: ./artifacts/*.zip
