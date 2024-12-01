@@ -5,7 +5,23 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+if (WIN32)
+    add_definitions(-DWIN32_LEAN_AND_MEAN)
+elseif(UNIX AND NOT APPLE)
+    set(LINUX TRUE)
+endif()
+
 find_package(OpenSSL REQUIRED)
+
+if(NOT OpenSSL_FOUND)
+    message(FATAL_ERROR "OpenSSL non trovato. Assicurati che sia installato e disponibile nel PATH.")
+endif()
+
+set(OPENSSL_ROOT_DIR "" CACHE PATH "Percorso personalizzato per OpenSSL")
+if(OPENSSL_ROOT_DIR)
+    set(OPENSSL_INCLUDE_DIR "${OPENSSL_ROOT_DIR}/include")
+    set(OPENSSL_LIBRARIES "${OPENSSL_ROOT_DIR}/lib")
+endif()
 
 add_library(CryptoMaster STATIC
         src/FileHandler.cpp
