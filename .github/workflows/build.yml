@@ -34,8 +34,10 @@ jobs:
         run: |
           cmake -DCMAKE_BUILD_TYPE=Release \
                 -DBUILD_SHARED_LIBS=ON \
-                -B build/${{ matrix.os }}/Release \
-                -S .
+                -DCMAKE_LIBRARY_OUTPUT_DIRECTORY=build/${{ matrix.os }}/Release \
+                -DCMAKE_ARCHIVE_OUTPUT_DIRECTORY=build/${{ matrix.os }}/Release \
+                -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=build/${{ matrix.os }}/Release \
+                -B build/${{ matrix.os }}/Release -S .
         shell: bash
 
       - name: Build Project
@@ -51,3 +53,4 @@ jobs:
             build/${{ matrix.os }}/Release/*.lib
             build/${{ matrix.os }}/Release/*.so
             build/${{ matrix.os }}/Release/*.dylib
+            build/${{ matrix.os }}/Release/*.dll
