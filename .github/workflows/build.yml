@@ -51,7 +51,7 @@ jobs:
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: CryptoMaster-libraries-${{ matrix.os }}-${{ matrix.shared_libs }}-${{ github.run_id }}
+          name: CryptoMaster-libraries-${{ matrix.os }}-${{ matrix.shared_libs == 'ON' && 'dynamic' || 'static' }}
           path: |
             build/${{ matrix.os }}/**/*.a
             build/${{ matrix.os }}/**/*.lib
@@ -61,11 +61,11 @@ jobs:
 
       - name: Compress Full Project
         run: |
-          zip -r project-${{ matrix.os }}-${{ github.run_id }}.zip .
+          zip -r CryptoMaster-${{ matrix.os }}-${{ matrix.shared_libs == 'ON' && 'dynamic' || 'static' }}.zip .
         shell: bash
 
-      - name: Upload Project Archive
+      - name: Upload Full Project Archive
         uses: actions/upload-artifact@v4
         with:
-          name: CryptoMaster-full-project-${{ matrix.os }}-${{ github.run_id }}
-          path: project-${{ matrix.os }}-${{ github.run_id }}.zip
+          name: CryptoMaster-full-project-${{ matrix.os }}-${{ matrix.shared_libs == 'ON' && 'dynamic' || 'static' }}
+          path: CryptoMaster-${{ matrix.os }}-${{ matrix.shared_libs == 'ON' && 'dynamic' || 'static' }}.zip
