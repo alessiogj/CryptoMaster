@@ -58,3 +58,17 @@ jobs:
             build/${{ matrix.os }}/**/*.so
             build/${{ matrix.os }}/**/*.dylib
             build/${{ matrix.os }}/**/*.dll
+
+      - name: Compress Full Project
+        run: |
+          mkdir -p packaged
+          cp -r * packaged/  # Copy all files to a separate folder to avoid conflicts
+          cd packaged
+          zip -r ../CryptoMaster-${{ matrix.os }}-${{ matrix.shared_libs == 'ON' && 'dynamic' || 'static' }}.zip .
+        shell: bash
+
+      - name: Upload Full Project Archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: CryptoMaster-full-project-${{ matrix.os }}-${{ matrix.shared_libs == 'ON' && 'dynamic' || 'static' }}
+          path: CryptoMaster-${{ matrix.os }}-${{ matrix.shared_libs == 'ON' && 'dynamic' || 'static' }}.zip
