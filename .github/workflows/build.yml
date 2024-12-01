@@ -51,7 +51,11 @@ jobs:
       - name: Package Artifacts
         run: |
           mkdir -p release
-          zip -r release/CryptoMaster-${{ matrix.os }}-${{ matrix.shared_libs == 'ON' && 'dynamic' || 'static' }}.zip build/${{ matrix.os }}
+          if [ "${{ matrix.os }}" == "windows-latest" ]; then
+            powershell Compress-Archive -Path build/${{ matrix.os }}/* -DestinationPath release/CryptoMaster-${{ matrix.os }}-${{ matrix.shared_libs == 'ON' && 'dynamic' || 'static' }}.zip
+          else
+            zip -r release/CryptoMaster-${{ matrix.os }}-${{ matrix.shared_libs == 'ON' && 'dynamic' || 'static' }}.zip build/${{ matrix.os }}
+          fi
         shell: bash
 
       - name: Upload Build Artifacts
