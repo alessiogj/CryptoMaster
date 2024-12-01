@@ -33,10 +33,10 @@ jobs:
         run: |
           cmake -DCMAKE_BUILD_TYPE=Release \
                 -DBUILD_SHARED_LIBS=${{ matrix.shared_libs }} \
-                -DCMAKE_LIBRARY_OUTPUT_DIRECTORY=build/${{ matrix.os }}/Release/${{ matrix.shared_libs == 'ON' && 'dynamic' || 'static' }} \
-                -DCMAKE_ARCHIVE_OUTPUT_DIRECTORY=build/${{ matrix.os }}/Release/${{ matrix.shared_libs == 'ON' && 'dynamic' || 'static' }} \
-                -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=build/${{ matrix.os }}/Release/${{ matrix.shared_libs == 'ON' && 'dynamic' || 'static' }} \
-                -B build/${{ matrix.os }}/Release/${{ matrix.shared_libs == 'ON' && 'dynamic' || 'static' }} -S .
+                -DCMAKE_LIBRARY_OUTPUT_DIRECTORY=build/${{ matrix.os }} \
+                -DCMAKE_ARCHIVE_OUTPUT_DIRECTORY=build/${{ matrix.os }} \
+                -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=build/${{ matrix.os }} \
+                -B build/${{ matrix.os }} -S .
         shell: bash
 
       - name: Build Project
