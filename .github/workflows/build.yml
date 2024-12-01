@@ -29,8 +29,15 @@ jobs:
           python -m pip install --upgrade pip
           pip install conan
 
-      - name: Setup CMake
-        uses: lukka/get-cmake@v3
+      - name: Install CMake
+        run: |
+          if [[ "$RUNNER_OS" == "Linux" ]]; then
+            sudo apt-get update && sudo apt-get install -y cmake;
+          elif [[ "$RUNNER_OS" == "macOS" ]]; then
+            brew install cmake;
+          else
+            choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System';
+          fi
 
       - name: Install Dependencies
         run: |
@@ -44,4 +51,4 @@ jobs:
         run: cmake --build build
 
       - name: Run Tests
-        run: ctest --test-dir build
+        run: ctest --test-dir build --output-on-failure
