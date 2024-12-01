@@ -40,7 +40,12 @@ jobs:
         shell: bash
 
       - name: Build Project
-        run: cmake --build build/${{ matrix.os }}/Release/${{ matrix.shared_libs == 'ON' && 'dynamic' || 'static' }}
+        run: |
+          if [ "${{ matrix.os }}" == "windows-latest" ]; then
+            cmake --build build/${{ matrix.os }}/Release/${{ matrix.shared_libs == 'ON' && 'dynamic' || 'static' }} --config Release
+          else
+            cmake --build build/${{ matrix.os }}/Release/${{ matrix.shared_libs == 'ON' && 'dynamic' || 'static' }}
+          fi
         shell: bash
 
       - name: Upload Build Artifacts
