@@ -2,7 +2,7 @@
 #define CRYPTOMASTER_FILEHANDLER_H
 
 #include <string>
-#include "Utils.h"
+#include "CryptoMaster.h"
 
 #ifdef _WIN32
 #ifdef CRYPTOMASTER_EXPORTS
@@ -25,7 +25,7 @@ public:
      * @return True if the operation was successful, false otherwise.
      */
     static bool encryptFile(const std::string &inputFilePath, const std::string &outputFilePath,
-                            const std::string &key, Utils::Algorithm algorithm);
+                            const std::string &key, CryptoMaster::Algorithm algorithm);
 
     /**
      * Decrypts the content of the input file and writes the result to the output file.
@@ -36,7 +36,7 @@ public:
      * @return True if the operation was successful, false otherwise.
      */
     static bool decryptFile(const std::string &inputFilePath, const std::string &outputFilePath,
-                            const std::string &key, Utils::Algorithm algorithm);
+                            const std::string &key, CryptoMaster::Algorithm algorithm);
 
 private:
     /**

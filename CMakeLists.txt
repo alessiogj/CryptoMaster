@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 project(CryptoMaster VERSION 1.0.0 LANGUAGES CXX)
 
-# Imposta il C++ standard
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -16,7 +15,7 @@ endif()
 
 add_library(CryptoMaster
         src/FileHandler.cpp
-        src/Utils.cpp
+        src/CryptoMaster.cpp
 )
 
 target_include_directories(CryptoMaster PUBLIC

@@ -134,13 +134,14 @@ If OpenSSL is installed system-wide and Conan is not used, specify the library p
 
 ```cpp
 #include "CryptoMaster/CryptoMaster.h"
+#include "CryptoMaster/FileHandler.h"
 
 int main() {
     const std::string inputFilePath = "example.txt";
     const std::string outputFilePath = "example_encrypted.txt";
-    const std::string key = Utils::generateKey();
+    const std::string key = CryptoMaster::generateKey();
 
-    if (FileHandler::encryptFile(inputFilePath, outputFilePath, key, Utils::Algorithm::AES_GCM)) {
+    if (FileHandler::encryptFile(inputFilePath, outputFilePath, key, CryptoMaster::Algorithm::AES_GCM)) {
         std::cout << "File encrypted successfully." << std::endl;
     } else {
         std::cerr << "Failed to encrypt file." << std::endl;
@@ -154,13 +155,14 @@ int main() {
 
 ```cpp
 #include "CryptoMaster/CryptoMaster.h"
+#include "CryptoMaster/FileHandler.h"
 
 int main() {
     const std::string inputFilePath = "example_encrypted.txt";
     const std::string outputFilePath = "example_decrypted.txt";
     const std::string key = "your-encryption-key";
 
-    if (FileHandler::decryptFile(inputFilePath, outputFilePath, key, Utils::Algorithm::AES_GCM)) {
+    if (FileHandler::decryptFile(inputFilePath, outputFilePath, key, CryptoMaster::Algorithm::AES_GCM)) {
         std::cout << "File decrypted successfully." << std::endl;
     } else {
         std::cerr << "Failed to decrypt file." << std::endl;
@@ -177,10 +179,10 @@ int main() {
 
 int main() {
     const std::string data = "Hello, world!";
-    const std::string key = Utils::generateKey();
+    const std::string key = CryptoMaster::generateKey();
     
-    std::string signature = Utils::sign(data, key);
-    if (Utils::verify(data, signature, key)) {
+    std::string signature = CryptoMaster::sign(data, key);
+    if (CryptoMaster::verify(data, signature, key)) {
         std::cout << "Signature verified successfully!" << std::endl;
     } else {
         std::cerr << "Signature verification failed!" << std::endl;

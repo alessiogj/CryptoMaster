@@ -40,14 +40,14 @@ bool FileHandler::writeFile(const std::string &filePath, const std::string &data
  * @param inputFilePath The path to the input file whose content needs to be encrypted.
  * @param outputFilePath The path to the output file where encrypted content will be written.
  * @param key The encryption key to be used.
- * @param algorithm The encryption algorithm to apply (defined in Utils::Algorithm).
+ * @param algorithm The encryption algorithm to apply (defined in CryptoMaster::Algorithm).
  * @return True if the operation completes successfully, false otherwise.
  * @throws std::runtime_error If the input file cannot be read or the output file cannot be written.
  */
 bool FileHandler::encryptFile(const std::string &inputFilePath, const std::string &outputFilePath,
-                              const std::string &key, Utils::Algorithm algorithm) {
+                              const std::string &key, CryptoMaster::Algorithm algorithm) {
     std::string data = readFile(inputFilePath);
-    std::string encryptedData = Utils::encrypt(data, key, algorithm);
+    std::string encryptedData = CryptoMaster::encrypt(data, key, algorithm);
     return writeFile(outputFilePath, encryptedData);
 }
 
@@ -57,13 +57,13 @@ bool FileHandler::encryptFile(const std::string &inputFilePath, const std::strin
  * @param inputFilePath The path to the input file whose content needs to be decrypted.
  * @param outputFilePath The path to the output file where decrypted content will be written.
  * @param key The decryption key to be used.
- * @param algorithm The decryption algorithm to apply (defined in Utils::Algorithm).
+ * @param algorithm The decryption algorithm to apply (defined in CryptoMaster::Algorithm).
  * @return True if the operation completes successfully, false otherwise.
  * @throws std::runtime_error If the input file cannot be read or the output file cannot be written.
  */
 bool FileHandler::decryptFile(const std::string &inputFilePath, const std::string &outputFilePath,
-                              const std::string &key, Utils::Algorithm algorithm) {
+                              const std::string &key, CryptoMaster::Algorithm algorithm) {
     std::string data = readFile(inputFilePath);
-    std::string decryptedData = Utils::decrypt(data, key, algorithm);
+    std::string decryptedData = CryptoMaster::decrypt(data, key, algorithm);
     return writeFile(outputFilePath, decryptedData);
 }
