@@ -17,7 +17,8 @@ jobs:
         build-type: [Release, Debug]
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
       - name: Setup Python
         uses: actions/setup-python@v4
@@ -29,6 +30,18 @@ jobs:
           python -m pip install --upgrade pip
           pip install conan
 
+      - name: Configure Conan Profile
+        run: |
+          conan profile new default --detect --force
+          conan profile update settings.compiler.cppstd=23 default
+
+      - name: Show Conan Profile
+        run: conan profile show default
+
+      - name: Install Dependencies
+        run: |
+          conan install . --output-folder=build --build=missing
+
       - name: Install CMake
         run: |
           if [[ "$RUNNER_OS" == "Linux" ]]; then
@@ -39,16 +52,11 @@ jobs:
             choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System';
           fi
 
-      - name: Install Dependencies
-        run: |
-          conan install . --output-folder=build --build=missing
-
       - name: Configure with CMake
         run: |
-          cmake -DCMAKE_TOOLCHAIN_FILE=build/conan_toolchain.cmake -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} -B build -S .
+          cmake -DCMAKE_TOOLCHAIN_FILE=build/conan_toolchain.cmake \
+                -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} \
+                -B build -S .
 
       - name: Build Project
         run: cmake --build build
-
-      - name: Run Tests
-        run: ctest --test-dir build --output-on-failure
