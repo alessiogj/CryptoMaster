@@ -20,28 +20,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.x"
-
-      - name: Install Conan
-        run: |
-          python -m pip install --upgrade pip
-          pip install conan
-
-      - name: Configure Conan Profile
-        run: |
-          conan profile new default --detect --force
-          conan profile update settings.compiler.cppstd=23 default
-
-      - name: Show Conan Profile
-        run: conan profile show default
-
-      - name: Install Dependencies
-        run: |
-          conan install . --output-folder=build --build=missing
-
       - name: Install CMake
         run: |
           if [[ "$RUNNER_OS" == "Linux" ]]; then
@@ -54,8 +32,7 @@ jobs:
 
       - name: Configure with CMake
         run: |
-          cmake -DCMAKE_TOOLCHAIN_FILE=build/conan_toolchain.cmake \
-                -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} \
+          cmake -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} \
                 -B build -S .
 
       - name: Build Project
