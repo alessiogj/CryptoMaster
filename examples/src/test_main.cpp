@@ -1,17 +1,16 @@
-#include <CryptoMaster/Utils.h>
-
 #include <iostream>
+#include <CryptoMaster/CryptoMaster.h>
 
 int main() {
     std::string data = "Hello, CryptoMaster!";
-    std::string key = Utils::generateKey();
+    std::string key = CryptoMaster::generateKey();
 
     std::cout << "Original: " << data << std::endl;
 
-    std::string encrypted = Utils::encrypt(data, key);
+    std::string encrypted = CryptoMaster::encrypt(data, key);
     std::cout << "Encrypted: " << encrypted << std::endl;
 
-    std::string decrypted = Utils::decrypt(encrypted, key);
+    std::string decrypted = CryptoMaster::decrypt(encrypted, key);
     std::cout << "Decrypted: " << decrypted << std::endl;
 
     return 0;

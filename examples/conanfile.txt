@@ -1,5 +1,5 @@
 [requires]
-cryptomaster/1.0.0
+cryptomaster/1.0.0@user/stable
 
 [generators]
 CMakeDeps
