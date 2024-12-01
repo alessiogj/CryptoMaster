@@ -14,6 +14,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
+        shared_libs: [ON, OFF]
 
     steps:
       - name: Checkout repository
@@ -31,24 +32,24 @@ jobs:
       - name: Configure with CMake
         run: |
           cmake -DCMAKE_BUILD_TYPE=Release \
-                -B build/${{ matrix.os }} -S .
+                -DBUILD_SHARED_LIBS=${{ matrix.shared_libs }} \
+                -DCMAKE_LIBRARY_OUTPUT_DIRECTORY=build/${{ matrix.os }}/Release_${{ matrix.shared_libs }} \
+                -DCMAKE_ARCHIVE_OUTPUT_DIRECTORY=build/${{ matrix.os }}/Release_${{ matrix.shared_libs }} \
+                -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=build/${{ matrix.os }}/Release_${{ matrix.shared_libs }} \
+                -B build/${{ matrix.os }}/Release_${{ matrix.shared_libs }} -S .
         shell: bash
 
-      - name: Build Shared Library
-        run: cmake --build build/${{ matrix.os }} --target CryptoMaster_shared
-        shell: bash
-
-      - name: Build Static Library
-        run: cmake --build build/${{ matrix.os }} --target CryptoMaster_static
+      - name: Build Project
+        run: cmake --build build/${{ matrix.os }}/Release_${{ matrix.shared_libs }}
         shell: bash
 
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: CryptoMaster-libraries-${{ matrix.os }}
+          name: CryptoMaster-libraries-${{ matrix.os }}-${{ matrix.shared_libs }}
           path: |
-            build/${{ matrix.os }}/**/*.a
-            build/${{ matrix.os }}/**/*.lib
-            build/${{ matrix.os }}/**/*.so
-            build/${{ matrix.os }}/**/*.dylib
-            build/${{ matrix.os }}/**/*.dll
+            build/${{ matrix.os }}/Release_${{ matrix.shared_libs }}/**/*.a
+            build/${{ matrix.os }}/Release_${{ matrix.shared_libs }}/**/*.lib
+            build/${{ matrix.os }}/Release_${{ matrix.shared_libs }}/**/*.so
+            build/${{ matrix.os }}/Release_${{ matrix.shared_libs }}/**/*.dylib
+            build/${{ matrix.os }}/Release_${{ matrix.shared_libs }}/**/*.dll

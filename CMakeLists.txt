@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-option(BUILD_SHARED_LIBS "Build shared libraries instead of static ones" ON)
+option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 
 find_package(OpenSSL REQUIRED)
 
