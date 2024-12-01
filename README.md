@@ -22,11 +22,11 @@ robust cryptographic operations.
 ### File Decryption Feature
 
 <p align="center">
-  <img src="img/Decrypt.svg" alt="Decrypt Feature" width="200" style="box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+  <img src="img/Decrypt.svg" alt="Decrypt Feature" width="500" style="box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
   margin-bottom: 20px;">
 </p>
 
-The decryption feature allows users to seamlessly decrypt files encrypted using AES-GCM or other supported algorithms. 
+The decryption feature allows users to seamlessly decrypt files encrypted using `AES-GCM` or other supported algorithms. 
 It's designed to handle large files efficiently and securely.
 
 ---
@@ -34,7 +34,7 @@ It's designed to handle large files efficiently and securely.
 ### Cryptography Algorithms
 
 <p align="center">
-  <img src="img/Cryptography.svg" alt="Cryptography Feature" width="200" style="box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+  <img src="img/Cryptography.svg" alt="Cryptography Feature" width="500" style="box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
    margin-bottom: 20px;">
 </p>
 
@@ -123,8 +123,7 @@ If OpenSSL is installed system-wide and Conan is not used, specify the library p
 ### File Encryption Example
 
 ```cpp
-#include "FileHandler.h"
-#include "Utils.h"
+#include "CryptoMaster/CryptoMaster.h"
 
 int main() {
     const std::string inputFilePath = "example.txt";
@@ -144,8 +143,7 @@ int main() {
 ### File Decryption Example
 
 ```cpp
-#include "FileHandler.h"
-#include "Utils.h"
+#include "CryptoMaster/CryptoMaster.h"
 
 int main() {
     const std::string inputFilePath = "example_encrypted.txt";
@@ -165,7 +163,7 @@ int main() {
 ### Generate a Key and Sign Data
 
 ```cpp
-#include "Utils.h"
+#include "CryptoMaster/CryptoMaster.h"
 
 int main() {
     const std::string data = "Hello, world!";
