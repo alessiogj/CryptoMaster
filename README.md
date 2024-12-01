@@ -41,6 +41,16 @@ It's designed to handle large files efficiently and securely.
 CryptoMaster supports a range of cryptographic algorithms to ensure the highest level of data security. The default 
 `AES-GCM` algorithm is ideal for secure file encryption and decryption.
 
+## Use pre-built binaries
+You can also download pre-built library artifacts directly from the
+project's CI/CD pipeline or artifact repository. Check the latest 
+release section or the CI/CD logs to find downloadable builds for 
+your platform.
+
+Note: Ensure that you also download the associated header files, as they
+are essential for integrating and using the library in your projects
+effectively. These headers define the library's interface and are
+necessary for compiling your application.
 
 ## Steps to Install the Library
 
@@ -196,3 +206,7 @@ int main() {
 
 Feel free to reach out to the project maintainers for further assistance or troubleshooting.
 
+---
+
+## Author
+- [Alessio Gjergji](https://github.com/alessiogj)
