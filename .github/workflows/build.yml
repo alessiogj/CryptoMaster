@@ -40,11 +40,16 @@ jobs:
         shell: bash
 
       - name: Build Project
-        run: cmake --build build/${{ matrix.os }}/Release/${{ matrix.shared_libs == 'ON' && 'dynamic' || 'static' }}
+        run: |
+          if [ "${{ matrix.os }}" == "windows-latest" ]; then
+            cmake --build build/${{ matrix.os }}/Release_${{ matrix.shared_libs }} --config Release
+          else
+            cmake --build build/${{ matrix.os }}/Release_${{ matrix.shared_libs }}
+          fi
         shell: bash
 
       - name: Upload Build Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: CryptoMaster-libraries-${{ matrix.os }}-${{ matrix.shared_libs == 'ON' && 'dynamic' || 'static' }}
           path: |
