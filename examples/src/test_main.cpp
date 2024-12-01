@@ -1,6 +1,4 @@
-#include <CryptoMaster/CryptoMaster/CryptoMaster.h>
-#include <CryptoMaster/CryptoMaster/FileHandler.h>
-#include <CryptoMaster/CryptoMaster/Utils.h>
+#include <CryptoMaster/Utils.h>
 
 #include <iostream>
 

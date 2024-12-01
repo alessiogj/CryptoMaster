@@ -36,7 +36,7 @@ install(TARGETS CryptoMaster
         INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/CryptoMaster
 )
 
-install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/CryptoMaster)
+install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 install(EXPORT CryptoMasterTargets
         FILE CryptoMasterTargets.cmake
