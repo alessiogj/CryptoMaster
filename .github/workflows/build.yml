@@ -63,6 +63,9 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
       - name: Download all Artifacts
         uses: actions/download-artifact@v3
         with:
@@ -74,7 +77,17 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: v${{ github.run_id }}
-          release_name: "Build CryptoMaster (Run ${{ github.run_id }})"
+          release_name: "CryptoMaster Build (Run ${{ github.run_id }})"
+          body: "Questa release include i build artefatti generati automaticamente."
           draft: false
           prerelease: false
-          files: ./artifacts/*.zip
+
+      - name: Upload Release Assets
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./artifacts/*.zip
+          asset_name: CryptoMaster-Builds.zip
+          asset_content_type: application/zip
