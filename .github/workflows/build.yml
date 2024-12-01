@@ -61,10 +61,7 @@ jobs:
 
       - name: Compress Full Project
         run: |
-          mkdir -p packaged
-          cp -r * packaged/  # Copy all files to a separate folder to avoid conflicts
-          cd packaged
-          zip -r ../CryptoMaster-${{ matrix.os }}-${{ matrix.shared_libs == 'ON' && 'dynamic' || 'static' }}.zip .
+          zip -r CryptoMaster-${{ matrix.os }}-${{ matrix.shared_libs == 'ON' && 'dynamic' || 'static' }}.zip . -x "CryptoMaster-*.zip"
         shell: bash
 
       - name: Upload Full Project Archive
